@@ -4,6 +4,9 @@
 // Standard library includes
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <iterator>
+#include <map>
 
 // Our project headers
 #include "CipherMode.hpp"
@@ -46,6 +49,10 @@ class PlayfairCipher {
 
     /// The cipher key, essentially a constant shift to be applied
     std::string key_ = "";
+
+    ///
+    std::map<char, std::pair<int,int>> l2ckeymap_;
+    std::map<std::pair<int,int>, char> c2lkeymap_;
 };
 
 #endif
