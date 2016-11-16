@@ -198,15 +198,15 @@ std::string inputText_2 = inputText_;
 			//   - Apply the rules to these coords to get 'new' coords
 
 			if ( char1Row == char2Row ) {
-				int char1ColNew = ((char1Col - 1) %5);
-				int char2ColNew = ((char2Col - 1) %5);
+				int char1ColNew = ((char1Col - 1 +5) %5);
+				int char2ColNew = ((char2Col - 1 +5) %5);
 				lett1 = ( *c2lkeymap_.find( std::make_pair(char1Row, char1ColNew))).second;
 				lett2 = ( *c2lkeymap_.find( std::make_pair(char2Row, char2ColNew))).second;
 			}
 
 			else if ( char1Col == char2Col) {
-				int char1RowNew = ((char1Row - 1) %5);
-				int char2RowNew = ((char2Row - 1) %5);	
+				int char1RowNew = ((char1Row - 1 +5) %5);
+				int char2RowNew = ((char2Row - 1 +5) %5);	
 				lett1 = ( *c2lkeymap_.find( std::make_pair(char1RowNew, char1Col))).second;
 				lett2 = ( *c2lkeymap_.find( std::make_pair(char2RowNew, char2Col))).second;
 			}
