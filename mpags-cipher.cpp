@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
       << "                   A null key, i.e. no encryption, is used if not supplied\n\n"
       << "  --encrypt        Will use the cipher to encrypt the input text (default behaviour)\n\n"
       << "  --decrypt        Will use the cipher to decrypt the input text\n\n"
-      << "  --cipher         Let's the user choose which method of cipher will be used\n" 
+      << "  --cipher         Lets the user choose which method of cipher will be used\n" 
       << "                   This must be followed by the name of the cipher (e.g. caesar, playfair...)\n";
     // Help requires no further action, so return from main,
     // with 0 used to indicate success

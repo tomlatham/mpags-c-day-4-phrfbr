@@ -81,19 +81,19 @@ bool processCommandLine(const std::vector<std::string>& args,
     }
 
     else if ( args[i] == "--cipher") {
-      if ( args[i+1] == "caesar") {
+      if (i == nArgs-1) {
+        std::cerr << "[error] -cipher requires a string argument" << std::endl;
+        // Set the flag to indicate the error and terminate the loop
+        processStatus = false;
+        break;
+      }
+      else if ( args[i+1] == "caesar") {
         settings.cipherType = CipherType::Caesar;
         ++i;
       }
       else if ( args[i+1] == "playfair") {
         settings.cipherType = CipherType::Playfair;
         ++i;   
-      }
-      else if (i == nArgs-1) {
-        std::cerr << "[error] -cipher requires a string argument" << std::endl;
-        // Set the flag to indicate the error and terminate the loop
-        processStatus = false;
-        break;
       }
       else {
         // Error if no cipher type is defined

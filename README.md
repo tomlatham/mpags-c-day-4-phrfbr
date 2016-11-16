@@ -75,6 +75,9 @@ Available options:
   --encrypt        Will use the cipher to encrypt the input text (default behaviour)
 
   --decrypt        Will use the cipher to decrypt the input text
+
+  --cipher         Lets the user choose which method of cipher will be used
+                   This must be followed by the name of the cipher (e.g. caesar, playfair...)
 ```
 
 If no input file is supplied, `mpags-cipher` will wait for user input
@@ -89,7 +92,7 @@ classical ciphers, it is transliterated using the following rules:
 - Digits are translated to their English equivalent words (e.g. '0' -> "ZERO")
 - All other characters (punctuation) are discarded
 
-At present only the Caesar Cipher is supported.
+At present the Caesar and Playfair ciphers are supported.
 
 # Source Code Layout
 Under this directory, the code and associated files are organised as
@@ -101,15 +104,30 @@ MPAGS-Code
 ├── LICENSE               License file, in our case MIT
 ├── CMakeLists.txt        CMake build script
 ├── mpags-cipher.cpp      Main program C++ source file
+├── Documentation         Subdirectory for documentation of the MPAGSCipher library
+│   ├── CMakeLists.txt
+│   └── Doxyfile.in
 ├── MPAGSCipher           Subdirectory for MPAGSCipher library code
+│   ├── CMakeLists.txt
 │   ├── CaesarCipher.cpp
 │   ├── CaesarCipher.hpp
 │   ├── CipherMode.hpp
+│   ├── CipherType.hpp
+│   ├── PlayfairCipher.cpp
+│   ├── PlayfairCipher.hpp
 │   ├── ProcessCommandLine.cpp
 │   ├── ProcessCommandLine.hpp
 │   ├── TransformChar.cpp
 │   └── TransformChar.hpp
-├── mpags-cipher.cpp
+├── Testing               Subdirectory for testing the MPAGSCipher library
+│   ├── CMakeLists.txt
+│   ├── catch.hpp
+│   ├── testCaesarCipher.cpp
+│   ├── testCatch.cpp
+│   ├── testHello.cpp
+│   ├── testPlayfairCipher.cpp
+│   ├── testProcessCommandLine.cpp
+│   └── testTransformChar.cpp
 ```
 
 # Copying

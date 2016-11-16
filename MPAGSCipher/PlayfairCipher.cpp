@@ -2,7 +2,6 @@
 // Standard library includes
 #include <iostream>
 #include <string>
-#include <vector>
 #include <algorithm>
 #include <iterator>
 #include <map>
@@ -12,14 +11,15 @@
 #include "CipherMode.hpp"
 
 PlayfairCipher::PlayfairCipher( const std::string key ) : key_("")
-  
 {
 	setKey(key);
 }
 
-void PlayfairCipher:: setKey(const std::string& key){
+void PlayfairCipher:: setKey(const std::string& key)
+{
 	// store the original key
 	key_ = key;
+
 	// Append the alphabet
 
 	key_ += "abcdefghijklmnopqrstuvwxyz";
@@ -30,7 +30,7 @@ void PlayfairCipher:: setKey(const std::string& key){
 
 	// Remove non-alpha characters
 
-	key_.erase(std::remove_if(key_.begin(),key_.end(), [] (unsigned char c) { return !std::isalpha(c); }), key_.end());
+	key_.erase(std::remove_if(key_.begin(),key_.end(), [] (char c) { return !std::isalpha(c); }), key_.end());
 
 	// Change J -> I
 
@@ -72,20 +72,16 @@ void PlayfairCipher:: setKey(const std::string& key){
 
 	// Store the playfair cihper key map
 
-//Print key to check code
-std::cout << "\n" << "The keymap is: " << key_ << "\n" << std::endl;
-
-
+	//Print key to check code
+	std::cout << "\n" << "The keymap is: " << key_ << "\n" << std::endl;
 }
 
 std::string PlayfairCipher::applyCipher(const std::string& inputText,  const CipherMode cipherMode ) const 
 {
 
-std::string inputText_ = inputText;
-std::string outputText{""};
-std::string playfairText{};
-std::string inputText_2 = inputText_;
-//unsigned int i {0};
+	std::string inputText_ { inputText };
+	std::string outputText{""};
+	std::string playfairText{};
 
 	// Change J → I
 
@@ -102,24 +98,28 @@ std::string inputText_2 = inputText_;
 		case CipherMode::Encrypt :
 		{
 
-			for (int j=0; j<n; ++j){
+			for (int j=0; j<n; j+=2){
 
-				if (inputText_[j] == inputText_[j+1]){
+				if ( j+1 == n ) {
+					outputText += inputText_[j];
+					break;
+				}
+
+				else if (inputText_[j] == inputText_[j+1]){
 					if(inputText_[j] != 'X'){
-						outputText += inputText_2[j];
+						outputText += inputText_[j];
 						outputText += 'X';
-						outputText += inputText_2[j];
-						++j;
+						--j;
 					}
 					else{
-						outputText += inputText_2[j];
+						outputText += inputText_[j];
 						outputText += 'Q';
-						outputText += inputText_2[j];
-						++j;
+						--j;
 					}
 				}
 				else {
-					outputText += inputText_2[j];
+					outputText += inputText_[j];
+					outputText += inputText_[j+1];
 				}
 			}
 
@@ -142,11 +142,11 @@ std::string inputText_2 = inputText_;
 			char lett1 = *iter;
 			char lett2 = *(iter + 1);
 
-			int char1Row = (*l2ckeymap_.find(lett1)).second.first;
-			int char1Col = (*l2ckeymap_.find(lett1)).second.second;
+			int char1Col = (*l2ckeymap_.find(lett1)).second.first;
+			int char1Row = (*l2ckeymap_.find(lett1)).second.second;
 
-			int char2Row = (*l2ckeymap_.find(lett2)).second.first;
-			int char2Col = (*l2ckeymap_.find(lett2)).second.second;
+			int char2Col = (*l2ckeymap_.find(lett2)).second.first;
+			int char2Row = (*l2ckeymap_.find(lett2)).second.second;
 
 
 			//   - Apply the rules to these coords to get 'new' coords
@@ -154,20 +154,20 @@ std::string inputText_2 = inputText_;
 			if ( char1Row == char2Row ) {
 				int char1ColNew = ((char1Col + 1) %5);
 				int char2ColNew = ((char2Col + 1) %5);
-				lett1 = ( *c2lkeymap_.find( std::make_pair(char1Row, char1ColNew))).second;
-				lett2 = ( *c2lkeymap_.find( std::make_pair(char2Row, char2ColNew))).second;
+				lett1 = ( *c2lkeymap_.find( std::make_pair(char1ColNew, char1Row))).second;
+				lett2 = ( *c2lkeymap_.find( std::make_pair(char2ColNew, char2Row))).second;
 			}
 
 			else if ( char1Col == char2Col) {
 				int char1RowNew = ((char1Row + 1) %5);
 				int char2RowNew = ((char2Row + 1) %5);	
-				lett1 = ( *c2lkeymap_.find( std::make_pair(char1RowNew, char1Col))).second;
-				lett2 = ( *c2lkeymap_.find( std::make_pair(char2RowNew, char2Col))).second;
+				lett1 = ( *c2lkeymap_.find( std::make_pair(char1Col, char1RowNew))).second;
+				lett2 = ( *c2lkeymap_.find( std::make_pair(char2Col, char2RowNew))).second;
 			}
 
 			else {
-				lett1 = ( *c2lkeymap_.find( std::make_pair( char1Row,char2Col))).second;
-				lett2 = ( *c2lkeymap_.find( std::make_pair( char2Row,char1Col))).second;
+				lett1 = ( *c2lkeymap_.find( std::make_pair( char2Col,char1Row))).second;
+				lett2 = ( *c2lkeymap_.find( std::make_pair( char1Col,char2Row))).second;
 			}
 
 
@@ -188,11 +188,11 @@ std::string inputText_2 = inputText_;
 			char lett1 = *iter;
 			char lett2 = *(iter + 1);
 
-			int char1Row = (*l2ckeymap_.find(lett1)).second.first;
-			int char1Col = (*l2ckeymap_.find(lett1)).second.second;
+			int char1Col = (*l2ckeymap_.find(lett1)).second.first;
+			int char1Row = (*l2ckeymap_.find(lett1)).second.second;
 
-			int char2Row = (*l2ckeymap_.find(lett2)).second.first;
-			int char2Col = (*l2ckeymap_.find(lett2)).second.second;
+			int char2Col = (*l2ckeymap_.find(lett2)).second.first;
+			int char2Row = (*l2ckeymap_.find(lett2)).second.second;
 
 
 			//   - Apply the rules to these coords to get 'new' coords
@@ -200,20 +200,20 @@ std::string inputText_2 = inputText_;
 			if ( char1Row == char2Row ) {
 				int char1ColNew = ((char1Col - 1 +5) %5);
 				int char2ColNew = ((char2Col - 1 +5) %5);
-				lett1 = ( *c2lkeymap_.find( std::make_pair(char1Row, char1ColNew))).second;
-				lett2 = ( *c2lkeymap_.find( std::make_pair(char2Row, char2ColNew))).second;
+				lett1 = ( *c2lkeymap_.find( std::make_pair(char1ColNew, char1Row))).second;
+				lett2 = ( *c2lkeymap_.find( std::make_pair(char2ColNew, char2Row))).second;
 			}
 
 			else if ( char1Col == char2Col) {
 				int char1RowNew = ((char1Row - 1 +5) %5);
 				int char2RowNew = ((char2Row - 1 +5) %5);	
-				lett1 = ( *c2lkeymap_.find( std::make_pair(char1RowNew, char1Col))).second;
-				lett2 = ( *c2lkeymap_.find( std::make_pair(char2RowNew, char2Col))).second;
+				lett1 = ( *c2lkeymap_.find( std::make_pair(char1Col, char1RowNew))).second;
+				lett2 = ( *c2lkeymap_.find( std::make_pair(char2Col, char2RowNew))).second;
 			}
 
 			else {
-				lett1 = ( *c2lkeymap_.find( std::make_pair( char1Row,char2Col))).second;
-				lett2 = ( *c2lkeymap_.find( std::make_pair( char2Row,char1Col))).second;
+				lett1 = ( *c2lkeymap_.find( std::make_pair( char2Col,char1Row))).second;
+				lett2 = ( *c2lkeymap_.find( std::make_pair( char1Col,char2Row))).second;
 			}
 
 
